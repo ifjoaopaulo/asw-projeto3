@@ -52,7 +52,7 @@ export class OrderService {
     const order = await this.orders.findById(id);
 
     if (!order) {
-      throw new OrderNotFoundError();
+      throw new OrderNotFoundError(`Pedido de id ${id} não encontrado.`);
     }
 
     return order;
