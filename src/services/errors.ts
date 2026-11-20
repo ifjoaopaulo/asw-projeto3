@@ -1,1 +1,1 @@
-export class OrderNotFoundError extends Error { };
+export class OrderNotFoundError extends Error {}
