@@ -6,7 +6,7 @@ import { OrderService } from '../services/OrderService';
 
 @injectable()
 export class OrderController {
-  constructor(@inject(OrderService) private orderService: OrderService) {}
+  constructor(@inject(OrderService) private orderService: OrderService) { }
 
   processOrder = async (req: Request, res: Response) => {
     try {
