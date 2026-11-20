@@ -3,6 +3,7 @@ import { inject, injectable } from 'inversify';
 import logger from '../lib/logger';
 import { PaymentError, ValidationError } from '../domain/errors';
 import { OrderService } from '../services/OrderService';
+import { OrderNotFoundError } from '../services/errors';
 
 @injectable()
 export class OrderController {
@@ -21,4 +22,16 @@ export class OrderController {
       return res.status(500).json({ error: 'Erro interno' });
     }
   };
+
+  async getById(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const order = await this.orderService.getOrderById(Number(id));
+      res.status(200).json(order);
+    } catch (error) {
+      if (error instanceof OrderNotFoundError) {
+        res.status(404).json({ message: error.message });
+      }
+    }
+  }
 }

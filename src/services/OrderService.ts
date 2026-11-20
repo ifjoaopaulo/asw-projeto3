@@ -2,12 +2,13 @@ import { inject, injectable } from 'inversify';
 import { TYPES } from '../container/types';
 import logger from '../lib/logger';
 import { ValidationError } from '../domain/errors';
-import { OrderItem, OrderLine } from '../domain/Order';
+import { Order, OrderItem, OrderLine } from '../domain/Order';
 import { ProductFactory } from '../domain/ProductFactory';
 import { IProductRepository } from '../repositories/IProductRepository';
 import { IOrderRepository } from '../repositories/IOrderRepository';
 import { PaymentMethodRegistry } from '../payments/PaymentMethodRegistry';
 import { NotificationService } from './NotificationService';
+import { OrderNotFoundError } from './errors';
 
 @injectable()
 export class OrderService {
@@ -16,7 +17,7 @@ export class OrderService {
     @inject(TYPES.OrderRepository) private orders: IOrderRepository,
     @inject(PaymentMethodRegistry) private payments: PaymentMethodRegistry,
     @inject(NotificationService) private notification: NotificationService,
-  ) {}
+  ) { }
 
   async placeOrder(customer: string, items: OrderItem[], paymentMethod: string, paymentDetails: any) {
     if (!items || items.length === 0) {
@@ -45,5 +46,15 @@ export class OrderService {
     logger.info(`Email enviado: ${emailPreview}`);
 
     return { orderId: order.id, total, emailPreview };
+  }
+
+  async getOrderById(id: number): Promise<Order> {
+    const order = await this.orders.findById(id);
+
+    if (!order) {
+      throw new OrderNotFoundError();
+    }
+
+    return order;
   }
 }
