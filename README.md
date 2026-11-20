@@ -1,15 +1,13 @@
 # E-commerce — Projeto 3
 
-Este é o e-commerce do Projeto 2 já resolvido, com InversifyJS e os modos `dev` e `test`. Ele é o ponto de partida deste trabalho. Se você fez o Projeto 2, pode usar o seu código.
+Esse é o projeto 3 de Arquitetura de Software, resolvido pelo aluno João Paulo Bastos. É um simulador de E-commerce, que roda em dois modos (dev (online) e test (offline)), por meio do Docker.
 
 ## Como rodar
 
+Rode o modo padrão (dev):
 ```bash
-npm install
 cp .env.example .env
-npm run prisma:migrate
-npm run prisma:seed
-npm run dev
+docker compose up --build
 ```
 
 A API sobe em `http://localhost:3000`. Teste com:
@@ -23,6 +21,11 @@ curl -X POST http://localhost:3000/orders \
   "paymentMethod": "pix"
 }'
 ```
+``` bash
+curl -X GET http://localhost:3000/orders/1
+```
+
+Para trocar para o modo test, edite o arquivo .env de 'dev' para 'test'.
 
 ## Estrutura
 
